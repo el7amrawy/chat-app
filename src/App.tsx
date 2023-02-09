@@ -13,6 +13,7 @@ const App = () => {
           <Route path="signin" element={<SignIn />} />
           <Route path="u" element={<SideBar />} />
         </Route>
+        <Route path="*" element={<>404 not found</>} />
       </Routes>
     </BrowserRouter>
   );
