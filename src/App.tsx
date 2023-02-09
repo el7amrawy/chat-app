@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SideBar from "./components/SideBar";
 import config from "./config";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
@@ -10,6 +11,7 @@ const App = () => {
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="signin" element={<SignIn />} />
+          <Route path="u" element={<SideBar />} />
         </Route>
       </Routes>
     </BrowserRouter>
