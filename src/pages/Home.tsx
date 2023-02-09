@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Home = () => {
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -49,12 +51,12 @@ const Home = () => {
                 className="input input-bordered"
               />
               <label className="label pb-0">
-                <a
-                  href="#"
+                <Link
+                  to="signin"
                   className="label-text-alt link link-hover text-primary"
                 >
                   Already Registered? Login
-                </a>
+                </Link>
               </label>
             </div>
             <div className="form-control mt-2">
