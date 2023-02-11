@@ -1,17 +1,20 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SideBar from "./components/SideBar";
 import config from "./config";
-import Home from "./pages/Home";
-import SignIn from "./pages/SignIn";
+import HomePage from "./pages/HomePage";
+import SignInPage from "./pages/SignInPage";
+import UserPage from "./pages/UserPage";
+import User from "./components/User";
 
 const App = () => {
   return (
     <BrowserRouter basename={config.base}>
       <Routes>
         <Route path="/">
-          <Route index element={<Home />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="u" element={<SideBar />} />
+          <Route index element={<HomePage />} />
+          <Route path="signin" element={<SignInPage />} />
+          <Route path="u" element={<UserPage />}>
+            <Route path=":user_id" element={<User />} />
+          </Route>
         </Route>
         <Route path="*" element={<>404 not found</>} />
       </Routes>

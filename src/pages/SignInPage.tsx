@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const SignIn = () => {
+const SignInPage = () => {
   return (
     <main className="hero min-h-screen bg-base-200">
       <form className="card shadow-2xl bg-base-100">
@@ -51,4 +51,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInPage;
