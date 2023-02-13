@@ -1,9 +1,8 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useContext } from "react";
 import { SocketContext } from "../context/SocketProvider";
+import Messenger from "./Messenger";
 
 const User = () => {
-  const { user_id } = useParams();
   const [msg, setMsg] = useState("");
   const [recievedMsg, setRecievedMsg] = useState("");
   const [room, setRoom] = useState("");
@@ -16,16 +15,17 @@ const User = () => {
     socket.emit("msg-from-client", { msg }, room);
   };
 
-  socket.on("connect", () => {
-    setId(socket.id);
-    socket.on("recieve", (data) => {
-      console.log(data);
-      setRecievedMsg(data);
-    });
-  });
+  // socket.on("connect", () => {
+  //   setId(socket.id);
+  //   socket.on("recieve", (data) => {
+  //     console.log(data);
+  //     setRecievedMsg(data);
+  //   });
+  // });
   return (
     <>
-      <div className="form-control w-fit">
+      <Messenger />
+      {/* <div className="form-control w-fit">
         <label className="">
           <span className="label-text">socket id: {id}</span>
         </label>
@@ -55,7 +55,7 @@ const User = () => {
           Join
         </button>
       </div>
-      <div>message: {recievedMsg}</div>
+      <div>message: {recievedMsg}</div> */}
     </>
   );
 };

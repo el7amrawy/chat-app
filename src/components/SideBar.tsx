@@ -8,7 +8,7 @@ import {
 
 const SideBar = () => {
   return (
-    <div className="bg-base-100 shadow-xl w-fit h-screen flex flex-col">
+    <div className=" bg-base-200 shadow-xl w-fit h-screen flex flex-col">
       <label className="label shadow p-3">
         <span className="label-text text-lg font-bold">Channels</span>
         <button className="btn btn-xs btn-square border-none">
@@ -42,7 +42,7 @@ const SideBar = () => {
           </div>
         </div>
       </div>
-      <label className="label p-3">
+      <label className="label p-3 bg-base-300">
         <span className="label-text text-lg font-bold">Channels</span>
         <div className="dropdown dropdown-top dropdown-end">
           <FontAwesomeIcon
@@ -61,7 +61,7 @@ const SideBar = () => {
               </a>
             </li>
             <li>
-              <a className="border-t-2 text-error">
+              <a className="text-error">
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout
               </a>
