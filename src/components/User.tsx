@@ -15,13 +15,13 @@ const User = () => {
     socket.emit("msg-from-client", { msg }, room);
   };
 
-  // socket.on("connect", () => {
-  //   setId(socket.id);
-  //   socket.on("recieve", (data) => {
-  //     console.log(data);
-  //     setRecievedMsg(data);
-  //   });
-  // });
+  socket.on("connect", () => {
+    setId(socket.id);
+    socket.on("recieve", (data) => {
+      console.log(data);
+      setRecievedMsg(data);
+    });
+  });
   return (
     <>
       <Messenger />

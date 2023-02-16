@@ -8,7 +8,7 @@ const Messenger = () => {
       <label className="label shadow-md p-3 flex justify-center items-center">
         <span className="label-text text-lg font-bold">Chat Name</span>
       </label>
-      <div className="mt-10 overflow-y-auto flex-auto h-0 px-20">
+      <div className="mt-10 overflow-y-auto flex-auto h-0 mx-20">
         {<Message />}
         {<Message />}
         {<Message />}
