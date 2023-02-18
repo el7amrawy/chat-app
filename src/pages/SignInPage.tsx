@@ -1,9 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, SyntheticEvent, useContext } from "react";
+import axios from "axios";
+import config from "../config";
+import { UserContext } from "../context/UserProvider";
 
 const SignInPage = () => {
+  /* ===================== states ===================== */
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const { setUserData } = useContext(UserContext);
+  const navigate = useNavigate();
+  /* ===================== handlers ===================== */
+  const submitHandler = async (ev: SyntheticEvent) => {
+    ev.preventDefault();
+    try {
+      const { data } = await axios.post(config.apiHost + "/users/signin", {
+        user: form,
+      });
+      setUserData({ user: data.user, token: data.authToken });
+      navigate("/u");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <main className="hero min-h-screen bg-base-200">
-      <form className="card shadow-2xl bg-base-100">
+      <form onSubmit={submitHandler} className="card shadow-2xl bg-base-100">
         <div className="card-body">
           <div className="form-control">
             <label className="label min-w-[210px] lg:min-w-[260px]">
@@ -13,6 +37,8 @@ const SignInPage = () => {
               type="text"
               placeholder="user@example.com"
               className="input input-bordered"
+              value={form.email}
+              onChange={(ev) => setForm({ ...form, email: ev.target.value })}
             />
           </div>
           <div className="form-control">
@@ -24,11 +50,13 @@ const SignInPage = () => {
               minLength={8}
               placeholder="password"
               className="input input-bordered"
+              value={form.password}
+              onChange={(ev) => setForm({ ...form, password: ev.target.value })}
             />
             <label className="label pb-0">
               <a
                 href="#"
-                className="label-text-alt link link-hover text-primary"
+                className="label-text-alt link link-hover text-secondary"
               >
                 Forgot Password?
               </a>
@@ -36,7 +64,7 @@ const SignInPage = () => {
             <label className="label pb-0">
               <Link
                 to="/"
-                className="label-text-alt link link-hover text-primary"
+                className="label-text-alt link link-hover text-secondary"
               >
                 Don't have an account yet?
               </Link>

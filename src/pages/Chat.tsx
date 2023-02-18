@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { SocketContext } from "../context/SocketProvider";
-import Messenger from "./Messenger";
+import Messenger from "../components/Messenger";
 
-const User = () => {
+const Chat = () => {
   const [msg, setMsg] = useState("");
   const [recievedMsg, setRecievedMsg] = useState("");
   const [room, setRoom] = useState("");
@@ -60,4 +60,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Chat;
