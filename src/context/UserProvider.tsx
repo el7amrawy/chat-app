@@ -1,18 +1,20 @@
 import React from "react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-// type User = {
-//   id?: Number;
-//   username: string;
-//   name: string;
-//   password: string;
-//   email: string;
-// };
+type User = {
+  id?: Number;
+  username: string;
+  name: string;
+  password: string;
+  email: string;
+};
 
-// type UserData = {
-//   user: User;
-//   token: string;
-// };
+type UserData = {
+  user: User;
+  token: string;
+};
+
+export type { UserData };
 
 type UserProviderProps = {
   children: ReactNode;
@@ -33,7 +35,7 @@ const UserProvider = (props: UserProviderProps) => {
     return {
       user: JSON.parse(localStorage.getItem("user") as unknown as string),
       token: JSON.parse(localStorage.getItem("token") as unknown as string),
-    };
+    } as unknown as UserData;
   });
   /* ===================== effects ===================== */
   useEffect(() => {

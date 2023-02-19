@@ -2,22 +2,24 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import { SocketProvider } from "../context/SocketProvider";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-
-const user = {
-  id: "1",
-};
+import { useEffect, useContext } from "react";
+import { UserContext } from "../context/UserProvider";
 
 const UserPage = () => {
   const navigate = useNavigate();
+  const { userData } = useContext(UserContext);
   useEffect(() => {
-    navigate(`${user.id}`);
+    if (userData.user.username) {
+      navigate("chat");
+    } else {
+      navigate("/");
+    }
   }, []);
   return (
     <main className="flex">
       <SideBar />
       <div className=" flex-grow">
-        <SocketProvider id={user.id}>
+        <SocketProvider userName={userData.user.username}>
           <Outlet />
         </SocketProvider>
       </div>

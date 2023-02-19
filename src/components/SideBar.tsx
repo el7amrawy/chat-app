@@ -5,13 +5,25 @@ import {
   faPlus,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { useState, SyntheticEvent, useRef, useContext } from "react";
+import { UserContext } from "../context/UserProvider";
+import { useNavigate } from "react-router-dom";
+import AddContacts from "./AddContacts";
 
 const SideBar = () => {
+  const [newChannelPop, setNewChannelPop] = useState(false);
+
+  const { setUserData, userData } = useContext(UserContext);
+  const navigate = useNavigate();
+
   return (
     <div className=" bg-base-200 shadow-xl w-fit h-screen flex flex-col">
       <label className="label shadow p-3">
         <span className="label-text text-lg font-bold">Channels</span>
-        <button className="btn btn-xs btn-square border-none">
+        <button
+          className="btn btn-xs btn-square border-none z-0"
+          onClick={() => setNewChannelPop(!newChannelPop)}
+        >
           <FontAwesomeIcon icon={faPlus} />
         </button>
       </label>
@@ -61,7 +73,13 @@ const SideBar = () => {
               </a>
             </li>
             <li>
-              <a className="text-error">
+              <a
+                className="text-error"
+                onClick={() => {
+                  setUserData({ token: null, user: {} });
+                  navigate("/signin");
+                }}
+              >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout
               </a>
@@ -69,6 +87,14 @@ const SideBar = () => {
           </ul>
         </div>
       </label>
+      {/* poopup */}
+      {newChannelPop ? (
+        <AddContacts
+          setNewChannelPop={setNewChannelPop}
+          // newChannelPop={newChannelPop}
+          userData={userData}
+        />
+      ) : null}
     </div>
   );
 };
