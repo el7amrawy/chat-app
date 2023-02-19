@@ -89,11 +89,7 @@ const SideBar = () => {
       </label>
       {/* poopup */}
       {newChannelPop ? (
-        <AddContacts
-          setNewChannelPop={setNewChannelPop}
-          // newChannelPop={newChannelPop}
-          userData={userData}
-        />
+        <AddContacts setNewChannelPop={setNewChannelPop} userData={userData} />
       ) : null}
     </div>
   );
