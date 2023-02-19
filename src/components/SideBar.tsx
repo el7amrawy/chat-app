@@ -5,7 +5,7 @@ import {
   faPlus,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, SyntheticEvent, useRef, useContext } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../context/UserProvider";
 import { useNavigate } from "react-router-dom";
 import AddContacts from "./AddContacts";
