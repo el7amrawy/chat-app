@@ -2,8 +2,8 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import config from "./config";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
-import UserPage from "./pages/UserPage";
-import Chat from "./pages/Chat";
+import ChatPage from "./pages/ChatPage";
+import Chat from "./components/Chat";
 import UserProvider from "./context/UserProvider";
 
 const App = () => {
@@ -20,7 +20,7 @@ const App = () => {
         >
           <Route index element={<HomePage />} />
           <Route path="signin" element={<SignInPage />} />
-          <Route path="u" element={<UserPage />}>
+          <Route path="u" element={<ChatPage />}>
             <Route path=":username/chat" element={<Chat />} />
           </Route>
         </Route>

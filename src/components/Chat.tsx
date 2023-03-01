@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { SocketContext } from "../context/SocketProvider";
-import Messenger from "../components/Messenger";
+import Messenger from "./Messenger";
 
 const Chat = () => {
   const [msg, setMsg] = useState("");
