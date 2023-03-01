@@ -5,16 +5,51 @@ import {
   faPlus,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserProvider";
 import { useNavigate } from "react-router-dom";
 import AddContacts from "./AddContacts";
+import ContactEl from "./ContactEl";
+import axios from "axios";
+import config from "../config";
+
+export type Contact = {
+  id: number;
+  user_id: string;
+  contact_id: string;
+  username: string;
+  name: string;
+};
 
 const SideBar = () => {
   const [newChannelPop, setNewChannelPop] = useState(false);
+  const [contacts, setContacts] = useState([] as unknown as Contact[]);
 
   const { setUserData, userData } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      console.log(config.apiHost + `/users/${userData.user.username}/contacts`);
+
+      axios
+        .get(config.apiHost + `/users/${userData.user.username}/contacts`, {
+          headers: {
+            Authorization: `auth ${userData.token}`,
+          },
+        })
+        .then((res) => {
+          const contacts = res.data as unknown as Contact[];
+          setContacts(contacts);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const contactsElems = contacts.map((contact) => (
+    <ContactEl contact={contact} key={contact.id} />
+  ));
 
   return (
     <div className=" bg-base-200 shadow-xl w-fit h-screen flex flex-col">
@@ -51,6 +86,11 @@ const SideBar = () => {
                 />
               </svg>
             </button>
+          </div>
+        </div>
+        <div className="flex flex-col h-full overflow-hidden">
+          <div className="overflow-y-auto flex-nowrap flex-auto h-0 mt-6 pb-8">
+            {contactsElems}
           </div>
         </div>
       </div>

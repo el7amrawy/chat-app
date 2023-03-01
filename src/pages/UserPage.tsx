@@ -10,7 +10,7 @@ const UserPage = () => {
   const { userData } = useContext(UserContext);
   useEffect(() => {
     if (userData.user.username) {
-      navigate("chat");
+      navigate(`${userData.user.username}/chat`);
     } else {
       navigate("/");
     }

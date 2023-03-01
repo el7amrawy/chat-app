@@ -21,8 +21,7 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="signin" element={<SignInPage />} />
           <Route path="u" element={<UserPage />}>
-            <Route path="chat" element={<Chat />} />
-            {/* <Route path=":user_id" element={} /> */}
+            <Route path=":username/chat" element={<Chat />} />
           </Route>
         </Route>
         <Route path="*" element={<>404 not found</>} />
