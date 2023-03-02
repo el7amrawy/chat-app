@@ -1,21 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import Message from "./Message";
-import { useState, useContext } from "react";
-import { Contact } from "./SideBar";
+import { useState, useContext, Dispatch } from "react";
 import { SocketContext } from "../context/SocketProvider";
+import { Contact } from "./SideBar";
 
-const Messenger = () => {
+type MessengerProps = {
+  currentChat: Contact;
+  setCurrentChat: Dispatch<React.SetStateAction<Contact>>;
+};
+
+const Messenger = (props: MessengerProps) => {
+  const { currentChat, setCurrentChat } = props;
   /* ======================= States ======================= */
-
-  const [currentChat, setCurrentChat] = useState(() => {
-    if (!localStorage.getItem("currentChat")) {
-      localStorage.setItem("currentChat", "{}");
-    }
-    return JSON.parse(
-      localStorage.getItem("currentChat") as unknown as string
-    ) as unknown as Contact;
-  });
   const [msg, setMsg] = useState("");
   const [recievedMsg, setRecievedMsg] = useState("");
   const [room, setRoom] = useState("");

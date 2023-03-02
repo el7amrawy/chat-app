@@ -5,7 +5,7 @@ import {
   faPlus,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, Dispatch } from "react";
 import { UserContext } from "../context/UserProvider";
 import { useNavigate } from "react-router-dom";
 import AddContacts from "./AddContacts";
@@ -21,7 +21,14 @@ export type Contact = {
   name: string;
 };
 
-const SideBar = () => {
+type SideBarProps = {
+  currentChat: Contact;
+  setCurrentChat: Dispatch<React.SetStateAction<Contact>>;
+};
+
+const SideBar = (props: SideBarProps) => {
+  const { setCurrentChat, currentChat } = props;
+  /* ================ states ================ */
   const [newChannelPop, setNewChannelPop] = useState(false);
   const [contacts, setContacts] = useState([] as unknown as Contact[]);
 
@@ -46,7 +53,12 @@ const SideBar = () => {
   }, []);
 
   const contactsElems = contacts.map((contact) => (
-    <ContactEl contact={contact} key={contact.id} />
+    <ContactEl
+      contact={contact}
+      key={contact.id}
+      currentChat={currentChat}
+      setCurrentChat={setCurrentChat}
+    />
   ));
 
   return (

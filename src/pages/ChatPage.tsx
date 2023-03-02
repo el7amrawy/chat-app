@@ -1,27 +1,33 @@
-// import { Outlet } from "react-router-dom";
-import SideBar from "../components/SideBar";
+import SideBar, { Contact } from "../components/SideBar";
 import { SocketProvider } from "../context/SocketProvider";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserProvider";
 import Messenger from "../components/Messenger";
 
 const UserPage = () => {
-  // const navigate = useNavigate();
   const { userData } = useContext(UserContext);
-  // useEffect(() => {
-  //   if (userData.user.username) {
-  //     navigate(`${userData.user.username}/chat`);
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, []);
+  /* ======================= States ======================= */
+  const [currentChat, setCurrentChat] = useState(() => {
+    if (!localStorage.getItem("currentChat")) {
+      localStorage.setItem("currentChat", "{}");
+    }
+    return JSON.parse(
+      localStorage.getItem("currentChat") as unknown as string
+    ) as unknown as Contact;
+  });
+  /* ======================= effects ======================= */
+  useEffect(() => {
+    localStorage.setItem("currentChat", JSON.stringify(currentChat));
+  }, [currentChat]);
   return (
     <main className="flex">
-      <SideBar />
+      <SideBar currentChat={currentChat} setCurrentChat={setCurrentChat} />
       <div className=" flex-grow">
         <SocketProvider userName={userData.user.username}>
-          <Messenger />
+          <Messenger
+            currentChat={currentChat}
+            setCurrentChat={setCurrentChat}
+          />
         </SocketProvider>
       </div>
     </main>
