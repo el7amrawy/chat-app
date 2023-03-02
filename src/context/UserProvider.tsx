@@ -9,12 +9,10 @@ type User = {
   email: string;
 };
 
-type UserData = {
+export type UserData = {
   user: User;
   token: string;
 };
-
-export type { UserData };
 
 type UserProviderProps = {
   children: ReactNode;

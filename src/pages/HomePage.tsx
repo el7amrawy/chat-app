@@ -130,7 +130,7 @@ const HomePage = () => {
                   to="signin"
                   className="label-text-alt link link-hover text-secondary"
                 >
-                  Already Registered? Login
+                  Already Registered? Signin
                 </Link>
               </label>
             </div>

@@ -30,8 +30,6 @@ const SideBar = () => {
 
   useEffect(() => {
     try {
-      console.log(config.apiHost + `/users/${userData.user.username}/contacts`);
-
       axios
         .get(config.apiHost + `/users/${userData.user.username}/contacts`, {
           headers: {

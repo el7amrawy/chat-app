@@ -20,7 +20,7 @@ const SignInPage = () => {
         user: form,
       });
       setUserData({ user: data.user, token: data.authToken });
-      navigate("/u");
+      navigate(`/u/${data.user.username}/chat`);
     } catch (err) {
       console.log(err);
     }

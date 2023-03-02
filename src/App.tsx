@@ -3,8 +3,8 @@ import config from "./config";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import ChatPage from "./pages/ChatPage";
-import Chat from "./components/Chat";
 import UserProvider from "./context/UserProvider";
+import ProtectedUser from "./components/ProtectedUser";
 
 const App = () => {
   return (
@@ -20,8 +20,15 @@ const App = () => {
         >
           <Route index element={<HomePage />} />
           <Route path="signin" element={<SignInPage />} />
-          <Route path="u" element={<ChatPage />}>
-            <Route path=":username/chat" element={<Chat />} />
+          <Route
+            path="u"
+            element={
+              <ProtectedUser>
+                <Outlet />
+              </ProtectedUser>
+            }
+          >
+            <Route path=":username/chat" element={<ChatPage />} />
           </Route>
         </Route>
         <Route path="*" element={<>404 not found</>} />
