@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import Message from "./Message";
-import { useState, useContext, Dispatch } from "react";
+import { useState, useContext, Dispatch, SyntheticEvent } from "react";
 import { SocketContext } from "../context/SocketProvider";
 import { Contact } from "./SideBar";
 
@@ -14,48 +14,47 @@ const Messenger = (props: MessengerProps) => {
   const { currentChat, setCurrentChat } = props;
   /* ======================= States ======================= */
   const [msg, setMsg] = useState("");
-  const [recievedMsg, setRecievedMsg] = useState("");
-  const [room, setRoom] = useState("");
-  const [id, setId] = useState("");
-
   /* ============================================== */
   const socket = useContext(SocketContext);
-  /* ======================= effects ======================= */
-  socket.on("connect", () => {
-    setId(socket.id);
-    socket.on("recieve", (data) => {
-      console.log(data);
-      setRecievedMsg(data);
-    });
-  });
+  /* ============================================== */
+  const submitHandler = (ev: SyntheticEvent) => {
+    ev.preventDefault();
+    try {
+      socket.emit("send-msg", { reciever: currentChat.username, msg });
+      setMsg("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <section className="flex flex-col h-full ">
-      <label className="label shadow-md p-3 flex justify-center items-center">
-        <span className="label-text text-lg font-bold">{currentChat.name}</span>
-      </label>
-      <div className="mt-10 overflow-y-auto flex-auto h-0 mx-20">
-        {<Message />}
-        {<Message />}
-        {<Message />}
-        {<Message />}
-        {<Message />}
-        {<Message />}
-        {<Message />}
-        {<Message />}
-      </div>
-      <div className="form-control px-20 my-10">
-        <label className="input-group w-ful flex">
-          <input
-            type="text"
-            placeholder="Type a message here"
-            className="input input-bordered flex-grow"
-          />
-          <button className="btn bg-primary border-none">
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </button>
-        </label>
-      </div>
+      {currentChat.name?.length ? (
+        <>
+          <label className="label shadow-md p-3 flex justify-center items-center">
+            <span className="label-text text-lg font-bold">
+              {currentChat.name}
+            </span>
+          </label>
+          <div className="mt-10 overflow-y-auto flex-auto h-0 mx-20">
+            {/*  */}
+          </div>
+          <form className="form-control px-20 my-10" onSubmit={submitHandler}>
+            <label className="input-group w-ful flex">
+              <input
+                type="text"
+                placeholder="Type a message here"
+                className="input input-bordered flex-grow"
+                value={msg}
+                onChange={(ev) => setMsg(ev.target.value)}
+              />
+              <button className="btn bg-primary border-none">
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </button>
+            </label>
+          </form>
+        </>
+      ) : null}
     </section>
   );
 };

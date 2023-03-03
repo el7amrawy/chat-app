@@ -1,4 +1,13 @@
-const Message = () => {
+import { Contact } from "./SideBar";
+
+type MessageProps = {
+  status: string;
+  msg: string;
+  contact: Contact;
+};
+
+const Message = (props: MessageProps) => {
+  const { status, msg, contact } = props;
   return (
     <div className=" flex mb-8">
       <div className=" w-11 h-11 rounded-lg overflow-hidden">
@@ -9,13 +18,10 @@ const Message = () => {
       </div>
       <div className="flex ml-7 flex-col">
         <label>
-          <span className="label-text text-lg font-bold">My Name</span>
+          <span className="label-text text-lg font-bold">{contact.name}</span>
           <span className=" label-text text-xs ml-2">yesterday at 1:29 PM</span>
         </label>
-        <div>
-          Suspendisse enim tellus, elementum quis dictum sed, sodales at mauris
-          😀
-        </div>
+        <div>{msg}</div>
       </div>
     </div>
   );

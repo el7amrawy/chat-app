@@ -4,22 +4,22 @@ import config from "../config";
 
 type SocketProviderProps = {
   children: ReactNode;
-  userName: string;
+  username: string;
 };
 
 export const SocketContext = createContext({} as unknown as Socket);
 
 export const SocketProvider = (props: SocketProviderProps) => {
-  const { children, userName } = props;
+  const { children, username } = props;
   const [socket, setSocket] = useState(() => io(""));
 
   useEffect(() => {
-    const newSocket = io(config.apiHost, { query: { id: userName } });
+    const newSocket = io(config.apiHost, { query: { username } });
     setSocket(newSocket);
     return () => {
       newSocket.close();
     };
-  }, [userName]);
+  }, [username]);
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

@@ -46,6 +46,7 @@ const AddContacts = (props: AddContactsProps) => {
           }
         );
         console.log(data);
+        setNewChannelPop(false);
       } catch (err) {
         console.error(err);
       }
