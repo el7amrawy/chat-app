@@ -5,6 +5,8 @@ import SignInPage from "./pages/SignInPage";
 import ChatPage from "./pages/ChatPage";
 import UserProvider from "./context/UserProvider";
 import ProtectedUser from "./components/ProtectedUser";
+import Alert from "./components/Alert";
+import AlertProvider from "./context/AlertProvider";
 
 const App = () => {
   return (
@@ -14,7 +16,10 @@ const App = () => {
           path="/"
           element={
             <UserProvider>
-              <Outlet />
+              <AlertProvider>
+                <Alert />
+                <Outlet />
+              </AlertProvider>
             </UserProvider>
           }
         >
@@ -24,6 +29,7 @@ const App = () => {
             path="u"
             element={
               <ProtectedUser>
+                <Alert />
                 <Outlet />
               </ProtectedUser>
             }
