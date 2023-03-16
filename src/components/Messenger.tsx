@@ -42,7 +42,13 @@ const Messenger = (props: MessengerProps) => {
     ev.preventDefault();
     try {
       socket.emit("send-msg", { reciever: currentContact.username, msg });
+      const sentMsg: ChatMsg = {
+        contact: currentContact,
+        msg,
+        status: "sent",
+      };
       setMsg("");
+      setChatMsgs([...chatMsgs, sentMsg]);
     } catch (err) {
       console.error(err);
     }
