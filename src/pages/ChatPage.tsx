@@ -9,8 +9,9 @@ const UserPage = () => {
   const { userData } = useContext(UserContext);
   const socket = useContext(SocketContext);
   /* ======================= States ======================= */
-  const [currentChat, setCurrentChat] = useState({} as unknown as Contact);
-  const [recievedMsg, setRecievedMsg] = useState("");
+  const [currentContact, setCurrentContact] = useState(
+    {} as unknown as Contact
+  );
   // socket.on("connection", () => {
   //   socket.on("recieve-msg", (res) => {
   //     console.log(res);
@@ -25,17 +26,20 @@ const UserPage = () => {
   // ) as unknown as Contact;
   // });
   /* ======================= effects ======================= */
-  // useEffect(() => {
-  //   localStorage.setItem("currentChat", JSON.stringify(currentChat));
-  // }, [currentChat]);
+  useEffect(() => {
+    localStorage.setItem("currentChat", JSON.stringify(currentContact));
+  }, [currentContact]);
   return (
     <main className="flex">
-      <SideBar currentChat={currentChat} setCurrentChat={setCurrentChat} />
+      <SideBar
+        currentContact={currentContact}
+        setCurrentContact={setCurrentContact}
+      />
       <div className=" flex-grow">
         <SocketProvider username={userData.user.username}>
           <Messenger
-            currentChat={currentChat}
-            setCurrentChat={setCurrentChat}
+            currentContact={currentContact}
+            setCurrentContact={setCurrentContact}
           />
         </SocketProvider>
       </div>

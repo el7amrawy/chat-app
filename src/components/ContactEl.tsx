@@ -3,16 +3,16 @@ import { Dispatch } from "react";
 
 type ContactElProps = {
   contact: Contact;
-  currentChat: Contact;
-  setCurrentChat: Dispatch<React.SetStateAction<Contact>>;
+  currentContact: Contact;
+  setCurrentContact: Dispatch<React.SetStateAction<Contact>>;
 };
 
 const ContactEl = (props: ContactElProps) => {
-  const { contact, currentChat, setCurrentChat } = props;
-
+  const { contact, currentContact, setCurrentContact } = props;
   const clickHandler = () => {
-    setCurrentChat(contact);
+    setCurrentContact(contact);
   };
+
   return (
     <div
       className="flex cursor-pointer rounded p-4 hover:bg-base-100 active:bg-primary"

@@ -22,12 +22,12 @@ export type Contact = {
 };
 
 type SideBarProps = {
-  currentChat: Contact;
-  setCurrentChat: Dispatch<React.SetStateAction<Contact>>;
+  currentContact: Contact;
+  setCurrentContact: Dispatch<React.SetStateAction<Contact>>;
 };
 
 const SideBar = (props: SideBarProps) => {
-  const { setCurrentChat, currentChat } = props;
+  const { setCurrentContact, currentContact } = props;
   /* ================ states ================ */
   const [newChannelPop, setNewChannelPop] = useState(false);
   const [contacts, setContacts] = useState([] as unknown as Contact[]);
@@ -56,8 +56,8 @@ const SideBar = (props: SideBarProps) => {
     <ContactEl
       contact={contact}
       key={contact.id}
-      currentChat={currentChat}
-      setCurrentChat={setCurrentChat}
+      currentContact={contact}
+      setCurrentContact={setCurrentContact}
     />
   ));
 
