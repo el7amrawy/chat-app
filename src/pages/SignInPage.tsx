@@ -23,10 +23,10 @@ const SignInPage = () => {
         user: form,
       });
       setUserData({ user: data.user, token: data.authToken });
+      setAlert({ status: true, msg: "Logged in Successfuly", type: "success" });
       navigate(`/u/${data.user.username}/chat`);
     } catch (err) {
       setAlert({ status: true, type: "error", msg: "Wrong Credentials" });
-      console.log(err);
     }
   };
   return (
