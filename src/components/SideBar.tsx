@@ -12,6 +12,7 @@ import AddContacts from "./AddContacts";
 import ContactEl from "./ContactEl";
 import axios from "axios";
 import config from "../config";
+import { useAlert } from "../context/AlertProvider";
 
 export type Contact = {
   id: number;
@@ -60,6 +61,8 @@ const SideBar = (props: SideBarProps) => {
       setCurrentContact={setCurrentContact}
     />
   ));
+
+  const { setAlert } = useAlert();
 
   return (
     <div className=" bg-base-200 shadow-xl w-fit h-screen flex flex-col">
@@ -127,6 +130,11 @@ const SideBar = (props: SideBarProps) => {
                 className="text-error"
                 onClick={() => {
                   setUserData({ token: null, user: {} });
+                  setAlert({
+                    msg: "Signed Out Successfuly",
+                    status: true,
+                    type: "warning",
+                  });
                   navigate("/signin");
                 }}
               >
