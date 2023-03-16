@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
-import { alertContext } from "../context/AlertProvider";
+import { useAlert } from "../context/AlertProvider";
 
 const Alert = () => {
-  const { alert, setAlert } = useContext(alertContext);
+  const { alert, setAlert } = useAlert();
   useEffect(() => {
     setTimeout(() => {
       setAlert({ ...alert, status: false });

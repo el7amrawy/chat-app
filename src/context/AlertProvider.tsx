@@ -1,4 +1,10 @@
-import { createContext, useState, ReactNode, Dispatch } from "react";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  useContext,
+} from "react";
 
 type Alert = {
   status: boolean;
@@ -11,7 +17,9 @@ type AlertContext = {
   setAlert: Dispatch<React.SetStateAction<Alert>>;
 };
 
-export const alertContext = createContext({} as unknown as AlertContext);
+const alertContext = createContext({} as unknown as AlertContext);
+
+export const useAlert = () => useContext(alertContext);
 
 type AlertProviderProps = {
   children: ReactNode;
