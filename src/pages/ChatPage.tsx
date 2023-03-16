@@ -11,6 +11,11 @@ const UserPage = () => {
   /* ======================= States ======================= */
   const [currentChat, setCurrentChat] = useState({} as unknown as Contact);
   const [recievedMsg, setRecievedMsg] = useState("");
+  // socket.on("connection", () => {
+  //   socket.on("recieve-msg", (res) => {
+  //     console.log(res);
+  //   });
+  // });
   // () => {
   // if (!localStorage.getItem("currentChat")) {
   //   localStorage.setItem("currentChat", "{}");

@@ -14,8 +14,14 @@ const Messenger = (props: MessengerProps) => {
   const { currentChat, setCurrentChat } = props;
   /* ======================= States ======================= */
   const [msg, setMsg] = useState("");
+
   /* ============================================== */
   const socket = useContext(SocketContext);
+  socket.on("connect", () => {
+    socket.on("recieve-msg", (res) => {
+      console.log(res);
+    });
+  });
   /* ============================================== */
   const submitHandler = (ev: SyntheticEvent) => {
     ev.preventDefault();
