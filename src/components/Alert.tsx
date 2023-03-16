@@ -1,15 +1,24 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useAlert } from "../context/AlertProvider";
 
 const Alert = () => {
   const { alert, setAlert } = useAlert();
+
+  setTimeout(() => {
+    setAlert({ ...alert, status: false });
+  }, 4000);
+
   useEffect(() => {
-    setTimeout(() => {
-      setAlert({ ...alert, status: false });
-    }, 4000);
-  }, []);
-  return alert.status ? (
-    <div className=" absolute top-4 right-4">
+    const alertDiv = document.getElementById("alert");
+    if (alert.status) {
+      alertDiv?.classList.remove("hidden");
+    } else {
+      alertDiv?.classList.add("hidden");
+    }
+  }, [alert]);
+
+  return (
+    <div id="alert" className="absolute top-4 right-4 hidden">
       <div className={`alert alert-${alert.type} shadow-lg`}>
         <div>
           {alert.type === "error" ? (
@@ -87,8 +96,6 @@ const Alert = () => {
         </div>
       </div>
     </div>
-  ) : (
-    <></>
   );
 };
 export default Alert;

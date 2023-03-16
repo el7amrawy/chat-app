@@ -3,6 +3,7 @@ import { useState, SyntheticEvent, useContext } from "react";
 import axios from "axios";
 import config from "../config";
 import { UserContext } from "../context/UserProvider";
+import { useAlert } from "../context/AlertProvider";
 
 const SignInPage = () => {
   /* ===================== states ===================== */
@@ -12,6 +13,8 @@ const SignInPage = () => {
   });
   const { setUserData } = useContext(UserContext);
   const navigate = useNavigate();
+  /* ---------------------------------------------- */
+  const { setAlert } = useAlert();
   /* ===================== handlers ===================== */
   const submitHandler = async (ev: SyntheticEvent) => {
     ev.preventDefault();
@@ -22,6 +25,7 @@ const SignInPage = () => {
       setUserData({ user: data.user, token: data.authToken });
       navigate(`/u/${data.user.username}/chat`);
     } catch (err) {
+      setAlert({ status: true, type: "error", msg: "Wrong Credentials" });
       console.log(err);
     }
   };
