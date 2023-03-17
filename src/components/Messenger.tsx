@@ -16,6 +16,8 @@ import { useAlert } from "../context/AlertProvider";
 type MessengerProps = {
   currentContact: Contact;
   setCurrentContact: Dispatch<React.SetStateAction<Contact>>;
+  chat: Object;
+  setChat: Dispatch<React.SetStateAction<{}>>;
 };
 
 type ChatMsg = {
@@ -25,33 +27,68 @@ type ChatMsg = {
 };
 
 const Messenger = (props: MessengerProps) => {
-  const { currentContact, setCurrentContact } = props;
+  const { currentContact, setCurrentContact, chat, setChat } = props;
   /* ---------------- States ---------------- */
   const [msg, setMsg] = useState("");
   const [recievedMsg, setRecievedMsg] = useState("");
-  const [chatMsgs, setChatMsgs] = useState([] as unknown as ChatMsg[]);
+  const [currentChat, setCurrentChat] = useState(
+    chat[currentContact.username as keyof Object] as unknown as ChatMsg[]
+  );
   /* ------------------------------ */
   const socket = useContext(SocketContext);
   socket.on("connect", () => {
     socket.on("recieve-msg", (res) => {
-      console.log(res);
       setRecievedMsg(res.msg);
     });
   });
   const { setAlert } = useAlert();
+  /* ---------------- effects ---------------- */
+  useEffect(() => {
+    setChat({
+      ...chat,
+      [currentContact.username as keyof Object]: currentChat,
+    });
+  }, [currentChat]);
+
+  useEffect(() => {
+    setCurrentChat(
+      chat[currentContact.username as keyof Object] as unknown as ChatMsg[]
+    );
+  }, [currentContact]);
+
+  useEffect(() => {
+    if (recievedMsg.length) {
+      const chatMsg: ChatMsg = {
+        contact: currentContact,
+        msg: recievedMsg,
+        status: "recieved",
+      };
+      setCurrentChat([...currentChat, chatMsg]);
+    }
+  }, [recievedMsg]);
+
   /* ---------------- handlers ---------------- */
   const submitHandler = (ev: SyntheticEvent) => {
     ev.preventDefault();
     if (msg.length) {
       try {
-        socket.emit("send-msg", { reciever: currentContact.username, msg });
+        socket.emit("send-msg", {
+          reciever: currentContact.username,
+          recieverId: currentContact.contact_id,
+          senderId: currentContact.user_id,
+          msg,
+        });
         const sentMsg: ChatMsg = {
           contact: currentContact,
           msg,
           status: "sent",
         };
         setMsg("");
-        setChatMsgs([...chatMsgs, sentMsg]);
+        if (currentChat?.length) {
+          setCurrentChat([...currentChat, sentMsg]);
+        } else {
+          setCurrentChat([sentMsg]);
+        }
       } catch (err) {
         setAlert({ msg: "Couldn't send message", type: "error", status: true });
         console.error(err);
@@ -64,19 +101,9 @@ const Messenger = (props: MessengerProps) => {
       });
     }
   };
-  /* ---------------- effects ---------------- */
-  useEffect(() => {
-    if (recievedMsg.length) {
-      const chatMsg: ChatMsg = {
-        contact: currentContact,
-        msg: recievedMsg,
-        status: "recieved",
-      };
-      setChatMsgs([...chatMsgs, chatMsg]);
-    }
-  }, [recievedMsg]);
+
   /* ---------------- */
-  const chatMsgsElems = chatMsgs.map((chatMsg) => (
+  const chatMsgsElems = currentChat?.map((chatMsg) => (
     <Message
       status={chatMsg.status}
       contact={currentContact}
@@ -84,6 +111,7 @@ const Messenger = (props: MessengerProps) => {
       key={nanoid()}
     />
   ));
+
   return (
     <section className="flex flex-col h-full ">
       {currentContact.name?.length ? (

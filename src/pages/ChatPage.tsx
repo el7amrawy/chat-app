@@ -6,14 +6,23 @@ import Messenger from "../components/Messenger";
 
 const UserPage = () => {
   const { userData } = useContext(UserContext);
-  /* ======================= States ======================= */
+  /* --------------------- States --------------------- */
   const [currentContact, setCurrentContact] = useState(
     {} as unknown as Contact
   );
-  /* ======================= effects ======================= */
-  // useEffect(() => {
-  //   localStorage.setItem("currentChat", JSON.stringify(currentContact));
-  // }, [currentContact]);
+  const [chat, setChat] = useState(() => {
+    if (!localStorage.getItem("chat")) {
+      localStorage.setItem("chat", "{}");
+    }
+    return JSON.parse(localStorage.getItem("chat") as unknown as string);
+  });
+  /* --------------------- effects --------------------- */
+  // useEffect(() => {}, [currentContact]);
+
+  useEffect(() => {
+    localStorage.setItem("chat", JSON.stringify(chat));
+  }, [chat]);
+
   return (
     <main className="flex">
       <SideBar
@@ -23,6 +32,8 @@ const UserPage = () => {
       <div className=" flex-grow">
         <SocketProvider username={userData.user.username}>
           <Messenger
+            chat={chat}
+            setChat={setChat}
             currentContact={currentContact}
             setCurrentContact={setCurrentContact}
           />
