@@ -130,6 +130,7 @@ const SideBar = (props: SideBarProps) => {
                 className="text-error"
                 onClick={() => {
                   setUserData({ token: null, user: {} });
+                  localStorage.clear();
                   setAlert({
                     msg: "Signed out successfuly",
                     status: true,
