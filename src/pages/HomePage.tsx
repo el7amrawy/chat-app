@@ -3,6 +3,7 @@ import axios from "axios";
 import config from "../config";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserProvider";
+import { useAlert } from "../context/AlertProvider";
 
 type User = {
   id?: Number;
@@ -22,6 +23,7 @@ const HomePage = () => {
   } as unknown as User);
   /* ========================================== */
   const { setUserData, userData } = useContext(UserContext);
+  const { setAlert } = useAlert();
   const navigate = useNavigate();
   useEffect(() => {
     if (userData.user?.username?.length && userData.token?.length > 20) {
@@ -36,7 +38,12 @@ const HomePage = () => {
         user: form,
       });
       setUserData({ user: data.user, token: data.authToken });
-      navigate("u");
+      navigate(`u/${data.user?.username}/chat`);
+      setAlert({
+        type: "success",
+        msg: "Created a new account successfully",
+        status: true,
+      });
     } catch (err) {
       console.error(err);
     }

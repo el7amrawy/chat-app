@@ -49,7 +49,7 @@ const SideBar = (props: SideBarProps) => {
           setContacts(contacts);
         });
     } catch (err) {
-      console.log(err);
+      setAlert({ msg: "Couldn't get contacts", type: "error", status: true });
     }
   }, []);
 
@@ -131,9 +131,9 @@ const SideBar = (props: SideBarProps) => {
                 onClick={() => {
                   setUserData({ token: null, user: {} });
                   setAlert({
-                    msg: "Signed Out Successfuly",
+                    msg: "Signed out successfuly",
                     status: true,
-                    type: "warning",
+                    type: "info",
                   });
                   navigate("/signin");
                 }}
@@ -147,7 +147,11 @@ const SideBar = (props: SideBarProps) => {
       </label>
       {/* poopup */}
       {newChannelPop ? (
-        <AddContacts setNewChannelPop={setNewChannelPop} userData={userData} />
+        <AddContacts
+          setContacts={setContacts}
+          setNewChannelPop={setNewChannelPop}
+          userData={userData}
+        />
       ) : null}
     </div>
   );

@@ -1,15 +1,18 @@
-import { useState, useRef, SyntheticEvent } from "react";
+import { useState, useRef, SyntheticEvent, Dispatch } from "react";
 import axios from "axios";
 import config from "../config";
 import { UserData } from "../context/UserProvider";
+import { useAlert } from "../context/AlertProvider";
+import { Contact } from "./SideBar";
 
 type AddContactsProps = {
   setNewChannelPop: React.Dispatch<React.SetStateAction<boolean>>;
+  setContacts: Dispatch<React.SetStateAction<Contact[]>>;
   userData: UserData;
 };
 
 const AddContacts = (props: AddContactsProps) => {
-  const { setNewChannelPop, userData } = props;
+  const { setNewChannelPop, userData, setContacts } = props;
   //
   const [popTab, setPopTab] = useState("contact");
   const [contactForm, setContactForm] = useState({
@@ -17,6 +20,8 @@ const AddContacts = (props: AddContactsProps) => {
   });
 
   const popRef = useRef(null);
+
+  const { setAlert } = useAlert();
 
   const clickHandler = (ev: SyntheticEvent) => {
     const tabs = document.querySelectorAll("div.tabs a.tab");
@@ -36,7 +41,7 @@ const AddContacts = (props: AddContactsProps) => {
     ev.preventDefault();
     if (popTab === "contact") {
       try {
-        const { data } = await axios.post(
+        await axios.post(
           config.apiHost + "/users/" + userData.user.username + "/contacts",
           { contact: contactForm },
           {
@@ -45,10 +50,37 @@ const AddContacts = (props: AddContactsProps) => {
             },
           }
         );
-        console.log(data);
         setNewChannelPop(false);
+        setAlert({
+          msg: `User ${contactForm.contact_username} has been added to your contacts list`,
+          type: "success",
+          status: true,
+        });
+
+        try {
+          axios
+            .get(config.apiHost + `/users/${userData.user.username}/contacts`, {
+              headers: {
+                Authorization: `auth ${userData.token}`,
+              },
+            })
+            .then((res) => {
+              const contacts = res.data as unknown as Contact[];
+              setContacts(contacts);
+            });
+        } catch (err) {
+          setAlert({
+            msg: "Couldn't get contacts",
+            type: "error",
+            status: true,
+          });
+        }
       } catch (err) {
-        console.error(err);
+        setAlert({
+          type: "error",
+          msg: "Failed to add a new contact",
+          status: true,
+        });
       }
     }
   };

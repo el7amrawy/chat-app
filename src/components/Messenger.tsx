@@ -11,6 +11,7 @@ import {
 import { SocketContext } from "../context/SocketProvider";
 import { Contact } from "./SideBar";
 import { nanoid } from "nanoid";
+import { useAlert } from "../context/AlertProvider";
 
 type MessengerProps = {
   currentContact: Contact;
@@ -37,20 +38,30 @@ const Messenger = (props: MessengerProps) => {
       setRecievedMsg(res.msg);
     });
   });
+  const { setAlert } = useAlert();
   /* ---------------- handlers ---------------- */
   const submitHandler = (ev: SyntheticEvent) => {
     ev.preventDefault();
-    try {
-      socket.emit("send-msg", { reciever: currentContact.username, msg });
-      const sentMsg: ChatMsg = {
-        contact: currentContact,
-        msg,
-        status: "sent",
-      };
-      setMsg("");
-      setChatMsgs([...chatMsgs, sentMsg]);
-    } catch (err) {
-      console.error(err);
+    if (msg.length) {
+      try {
+        socket.emit("send-msg", { reciever: currentContact.username, msg });
+        const sentMsg: ChatMsg = {
+          contact: currentContact,
+          msg,
+          status: "sent",
+        };
+        setMsg("");
+        setChatMsgs([...chatMsgs, sentMsg]);
+      } catch (err) {
+        setAlert({ msg: "Couldn't send message", type: "error", status: true });
+        console.error(err);
+      }
+    } else {
+      setAlert({
+        msg: "Message can not be empty",
+        status: true,
+        type: "warning",
+      });
     }
   };
   /* ---------------- effects ---------------- */
