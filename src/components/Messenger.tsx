@@ -40,6 +40,9 @@ const Messenger = (props: MessengerProps) => {
     socket.on("recieve-msg", (res) => {
       setRecievedMsg(res.msg);
     });
+    socket.on("offline-msgs", (res) => {
+      console.log(res);
+    });
   });
   const { setAlert } = useAlert();
   /* ---------------- effects ---------------- */

@@ -5,16 +5,17 @@ import config from "../config";
 type SocketProviderProps = {
   children: ReactNode;
   username: string;
+  userId: number;
 };
 
 export const SocketContext = createContext({} as unknown as Socket);
 
 export const SocketProvider = (props: SocketProviderProps) => {
-  const { children, username } = props;
+  const { children, username, userId } = props;
   const [socket, setSocket] = useState(() => io(""));
 
   useEffect(() => {
-    const newSocket = io(config.apiHost, { query: { username } });
+    const newSocket = io(config.apiHost, { query: { username, userId } });
     setSocket(newSocket);
     return () => {
       newSocket.close();

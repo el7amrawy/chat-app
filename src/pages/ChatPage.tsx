@@ -16,9 +16,8 @@ const UserPage = () => {
     }
     return JSON.parse(localStorage.getItem("chat") as unknown as string);
   });
+  const [contacts, setContacts] = useState([] as unknown as Contact[]);
   /* --------------------- effects --------------------- */
-  // useEffect(() => {}, [currentContact]);
-
   useEffect(() => {
     localStorage.setItem("chat", JSON.stringify(chat));
   }, [chat]);
@@ -26,11 +25,16 @@ const UserPage = () => {
   return (
     <main className="flex">
       <SideBar
+        contacts={contacts}
+        setContacts={setContacts}
         currentContact={currentContact}
         setCurrentContact={setCurrentContact}
       />
       <div className=" flex-grow">
-        <SocketProvider username={userData.user.username}>
+        <SocketProvider
+          username={userData.user.username}
+          userId={userData.user.id}
+        >
           <Messenger
             chat={chat}
             setChat={setChat}

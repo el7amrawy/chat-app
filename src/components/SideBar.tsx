@@ -25,13 +25,14 @@ export type Contact = {
 type SideBarProps = {
   currentContact: Contact;
   setCurrentContact: Dispatch<React.SetStateAction<Contact>>;
+  contacts: Contact[];
+  setContacts: Dispatch<React.SetStateAction<Contact[]>>;
 };
 
 const SideBar = (props: SideBarProps) => {
-  const { setCurrentContact, currentContact } = props;
+  const { setCurrentContact, currentContact, contacts, setContacts } = props;
   /* ================ states ================ */
   const [newChannelPop, setNewChannelPop] = useState(false);
-  const [contacts, setContacts] = useState([] as unknown as Contact[]);
 
   const { setUserData, userData } = useContext(UserContext);
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const SideBar = (props: SideBarProps) => {
     }
   }, []);
 
-  const contactsElems = contacts.map((contact) => (
+  const contactsElems = contacts?.map((contact) => (
     <ContactEl
       contact={contact}
       key={contact.id}
