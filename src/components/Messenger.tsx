@@ -12,6 +12,9 @@ import { SocketContext } from "../context/SocketProvider";
 import { Contact } from "./SideBar";
 import { nanoid } from "nanoid";
 import { useAlert } from "../context/AlertProvider";
+import axios from "axios";
+import { UserContext } from "../context/UserProvider";
+import config from "../config";
 
 type MessengerProps = {
   currentContact: Contact;
@@ -26,31 +29,80 @@ type ChatMsg = {
   contact: Contact;
 };
 
+type OfflineMsg = {
+  recieverid: string;
+  senderid: string;
+  text: string;
+};
+
 const Messenger = (props: MessengerProps) => {
-  const { currentContact, setCurrentContact, chat, setChat } = props;
+  const { currentContact, chat, setChat } = props;
+
   /* ---------------- States ---------------- */
   const [msg, setMsg] = useState("");
   const [recievedMsg, setRecievedMsg] = useState("");
   const [currentChat, setCurrentChat] = useState(
     chat[currentContact.username as keyof Object] as unknown as ChatMsg[]
   );
+
   /* ------------------------------ */
+  const { userData } = useContext(UserContext);
   const socket = useContext(SocketContext);
   socket.on("connect", () => {
     socket.on("recieve-msg", (res) => {
       setRecievedMsg(res.msg);
     });
-    socket.on("offline-msgs", (res) => {
-      console.log(res);
+
+    socket.on("offline-msgs", async (res: OfflineMsg[]) => {
+      // fetch contacts
+      const { data } = await axios.get(
+        config.apiHost + `/users/${userData.user.username}/contacts`,
+        {
+          headers: {
+            Authorization: `auth ${userData.token}`,
+          },
+        }
+      );
+      const contacts = data as unknown as Contact[];
+
+      res.map(({ senderid, text }) => {
+        const senderContact = contacts?.find(
+          (contact) => contact.contact_id === senderid
+        ) as unknown as Contact;
+
+        const chatMsg: ChatMsg = {
+          contact: senderContact,
+          status: "recieved",
+          msg: text,
+        };
+        setChat((oldChat) => {
+          const chat = new Object(oldChat);
+          if (!oldChat[senderContact.username as keyof Object]?.length) {
+            (chat[
+              senderContact.username as keyof Object
+            ] as unknown as ChatMsg[]) = [chatMsg];
+          } else {
+            (
+              chat[
+                senderContact.username as keyof Object
+              ] as unknown as ChatMsg[]
+            ).push(chatMsg);
+          }
+          return chat;
+        });
+      });
     });
   });
+
   const { setAlert } = useAlert();
   /* ---------------- effects ---------------- */
   useEffect(() => {
-    setChat({
+    const newChat = {
       ...chat,
       [currentContact.username as keyof Object]: currentChat,
-    });
+    } as unknown as Object;
+    delete newChat["undefined" as keyof Object];
+    setChat(newChat);
   }, [currentChat]);
 
   useEffect(() => {

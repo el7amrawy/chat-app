@@ -10,8 +10,6 @@ import { UserContext } from "../context/UserProvider";
 import { useNavigate } from "react-router-dom";
 import AddContacts from "./AddContacts";
 import ContactEl from "./ContactEl";
-import axios from "axios";
-import config from "../config";
 import { useAlert } from "../context/AlertProvider";
 
 export type Contact = {
@@ -36,23 +34,6 @@ const SideBar = (props: SideBarProps) => {
 
   const { setUserData, userData } = useContext(UserContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      axios
-        .get(config.apiHost + `/users/${userData.user.username}/contacts`, {
-          headers: {
-            Authorization: `auth ${userData.token}`,
-          },
-        })
-        .then((res) => {
-          const contacts = res.data as unknown as Contact[];
-          setContacts(contacts);
-        });
-    } catch (err) {
-      setAlert({ msg: "Couldn't get contacts", type: "error", status: true });
-    }
-  }, []);
 
   const contactsElems = contacts?.map((contact) => (
     <ContactEl
